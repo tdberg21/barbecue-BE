@@ -43,11 +43,39 @@ app.post('/api/v1/users/new', (request, response) => {
     });
 });
 
-// app.post('/api/v1/restaurants', (request, response) => {
-//   const restaurant = request.query;
-//   console.log(request.query);
+app.post('/api/v1/users', async (request, response) => {
+  const guest = request.query;
+  try {
+    const users = await database('users').select()
+    const validation = users.find(user => {
+      return (user.email === guest.email) && (user.password === guest.password)
+    })
+    response.status(201).json({ username: validation.username, id: validation.id })
+  } catch (error) {
+    console.log(error)
+    response.status(500).json('Incorrect email or password', error)
+  }
+})
 
-// })
+app.post('/api/v1/restaurants', (request, response) => {
+ const restaurant = request.query;
+    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name']) {
+      if (!restaurant[requiredParameter]) {
+        return response
+          .status(422)
+          .send({
+            error: `You're missing a "${requiredParameter}" property.`});
+      }
+    }
+    
+  database('restaurants').insert(restaurant, 'id')
+    .then(restaurant => {
+      response.status(201).json({ id: restaurant[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    })
+});
 
 app.listen(3000, () => {
   console.log('Express intro running on localhost: 3000')
