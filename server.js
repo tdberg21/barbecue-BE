@@ -3,6 +3,10 @@ const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*')
@@ -59,8 +63,7 @@ app.post('/api/v1/users/new', (request, response) => {
 });
 
 app.post('/api/v1/users', async (request, response) => {
-  const guest = request.query;
-  console.log('request body:', request.body)
+  const guest = request.body;
   try {
     const users = await database('users').select()
     console.log('trying')
