@@ -78,8 +78,9 @@ app.post('/api/v1/users', async (request, response) => {
 })
 
 app.post('/api/v1/restaurants', (request, response) => {
+  console.log(request.body)
  const restaurant = request.query;
-    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name']) {
+    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name', 'meal', 'yelpId']) {
       if (!restaurant[requiredParameter]) {
         return response
           .status(422)
