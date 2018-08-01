@@ -12,7 +12,7 @@ exports.up = function(knex, Promise) {
 
     knex.schema.createTable('restaurants', function(table) {
       table.increments('id').primary();
-      table.string('name')
+      table.string('name');
       table.string('rating');
       table.string('notes');
       table.string('date');

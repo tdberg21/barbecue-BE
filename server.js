@@ -3,6 +3,10 @@ const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*')
@@ -59,8 +63,7 @@ app.post('/api/v1/users/new', (request, response) => {
 });
 
 app.post('/api/v1/users', async (request, response) => {
-  const guest = request.query;
-  console.log('request body:', request.body)
+  const guest = request.body;
   try {
     const users = await database('users').select()
     console.log('trying')
@@ -75,8 +78,9 @@ app.post('/api/v1/users', async (request, response) => {
 })
 
 app.post('/api/v1/restaurants', (request, response) => {
+console.log(request.query)
  const restaurant = request.query;
-    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name']) {
+    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name', 'meal', 'yelpId', 'imageUrl', 'yelpUrl']) {
       if (!restaurant[requiredParameter]) {
         return response
           .status(422)
@@ -106,5 +110,5 @@ app.get('/api/v1/restaurants/:id', async (request, response) => {
 });
 
 app.listen(3000, () => {
-  console.log('Express intro running on localhost: 3000')
+  console.log('BBQ Tracker backend running on localhost: 3000')
 });
