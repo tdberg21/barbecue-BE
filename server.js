@@ -78,9 +78,9 @@ app.post('/api/v1/users', async (request, response) => {
 })
 
 app.post('/api/v1/restaurants', (request, response) => {
-  console.log(request.body)
+console.log(request.query)
  const restaurant = request.query;
-    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name', 'meal', 'yelpId']) {
+    for (let requiredParameter of ['rating', 'notes', 'date', 'user_id', 'restaurant_name', 'meal', 'yelpId', 'imageUrl', 'yelpUrl']) {
       if (!restaurant[requiredParameter]) {
         return response
           .status(422)
@@ -110,5 +110,5 @@ app.get('/api/v1/restaurants/:id', async (request, response) => {
 });
 
 app.listen(3000, () => {
-  console.log('Express intro running on localhost: 3000')
+  console.log('BBQ Tracker backend running on localhost: 3000')
 });
